@@ -49,7 +49,6 @@ namespace quickLaunch
 
             // Add menu to tray icon and show it.
             trayIcon.ContextMenu = trayMenu;
-            //trayIcon.Visible = true;
         }
 
         private void launchApp(string app, string appParams)
@@ -89,6 +88,11 @@ namespace quickLaunch
                 launchApp("cmd.exe", cmd);
                 wsFolder.Text = fbd.SelectedPath;
             }
+        }
+
+        private void OnClickMyBJN(object sender, EventArgs e)
+        {
+            launchApp("https://bluejeans.com/4159908751","");
         }
     }
 }
