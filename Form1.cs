@@ -22,13 +22,15 @@ namespace quickLaunch
 
         private void QuickLaunch_Load(object sender, EventArgs e)
         {
-            Rectangle scrn = Screen.PrimaryScreen.Bounds;
+            ShowInTaskbar = false;
+            Visible = false;
+            Rectangle scrn = Screen.PrimaryScreen.WorkingArea;
             this.Location = new Point(scrn.Width - this.Width, scrn.Height - this.Height);
-            this.WindowState = FormWindowState.Minimized;
 
             Bitmap bmFolderWhere = new Bitmap(GetType(), "folderlocn.png");
             btnFolderWhere.BackgroundImage = bmFolderWhere;
             this.Icon = Icon.FromHandle(bmFolderWhere.GetHicon());
+
             setupforTray();
         }
 
@@ -53,8 +55,9 @@ namespace quickLaunch
 
         private void launchApp(string app, string appParams)
         {
-            this.WindowState = FormWindowState.Minimized;
+            // this.WindowState = FormWindowState.Minimized;
             Process.Start(app, appParams);
+            this.Visible = false;
         }
 
         private void QuickLaunch_Click(object sender, EventArgs e)
@@ -64,7 +67,10 @@ namespace quickLaunch
 
         private void OnClickTrayIcon(object sender, EventArgs e)
         {
-            this.WindowState = this.WindowState == FormWindowState.Minimized ? FormWindowState.Normal : FormWindowState.Minimized;
+
+            Console.WriteLine("VIsible: " + this.Visible);
+            // this.WindowState = FormWindowState.Normal;
+            this.Visible = this.Visible ? false : true;
         }
 
         private void OnKeyUpMonitor(object sender, KeyEventArgs e)
@@ -78,21 +84,39 @@ namespace quickLaunch
             }
         }
 
+        private void startWebServer()
+        {
+            string cmd = "/K node %userprofile%\\documents\\github\\https\\server.js " + wsFolder.Text;
+            launchApp("cmd.exe", cmd);
+        }
+
         private void OnClickFolderLocation(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
 
             if( DialogResult.OK == fbd.ShowDialog())
             {
-                string cmd = "/K node %userprofile%\\documents\\github\\swagserver\\index.js " + fbd.SelectedPath;
-                launchApp("cmd.exe", cmd);
                 wsFolder.Text = fbd.SelectedPath;
+                startWebServer();
             }
         }
 
         private void OnClickMyBJN(object sender, EventArgs e)
         {
             launchApp("https://bluejeans.com/4159908751","");
+        }
+
+        private void OnFirstShow(object sender, EventArgs e)
+        {
+            this.Visible = false;
+        }
+
+        private void OnKeyUpWebServer(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                startWebServer();
+            }
         }
     }
 }
