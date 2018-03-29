@@ -20,6 +20,9 @@ namespace quickLaunch
 
         private Array applications;
 
+        //private string webServerPath = "node %userprofile%\\documents\\github\\https\\server.js";
+        private string webServerPath = "node %userprofile%\\documents\\node\\https\\server.js";
+
         private void QuickLaunch_Load(object sender, EventArgs e)
         {
             ShowInTaskbar = false;
@@ -86,7 +89,7 @@ namespace quickLaunch
 
         private void startWebServer()
         {
-            string cmd = "/K node %userprofile%\\documents\\github\\https\\server.js " + wsFolder.Text;
+            string cmd = "/K " + webServerPath + " " + wsFolder.Text;
             launchApp("cmd.exe", cmd);
         }
 
